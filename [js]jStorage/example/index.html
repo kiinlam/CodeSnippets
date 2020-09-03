@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Storage Template</title>
+	<meta charset="UTF-8" />
+</head>
+
+<body>
+	<div id="app">
+		<button id="reset">reset</button>(重置所有数据)
+		<p id="reset_result"></p>
+
+		<button id="getAll">get all data store</button>(获取所有数据)
+		<p id="get_result"></p>
+
+		<button id="getMac">get mac</button>(获取一次性存储数据)
+		<p id="getMac_result"></p>
+		
+		<button id="getWindows">get windows</button>(获取keys数组、length长度、迭代keys获取key下的值)
+		<p id="getWindows_result"></p>
+		
+		<button id="removeSay">remove 'say' of windows</button>(移除指定key值)
+		<p id="removeSay_result"></p>
+
+		<button id="removeAll">clear linux</button>(删除linux所有记录)
+		<p id="removeAll_result"></p>
+
+		<button id="dropLinux">drop linux</button>(删除linux数据表)
+		<p id="dropLinux_result"></p>
+
+		<button id="dropSystem">drop system</button>(删除system数据库，删除后所有指向该数据库的实例都不能再使用)
+		<p id="dropSystem_result"></p>
+
+	</div>
+
+	<script src="src/index.js">
+	</script>
+</body>
+
+</html>
