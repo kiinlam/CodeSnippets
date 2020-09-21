@@ -42,6 +42,7 @@ const errorCodeField = 'status_code'
 const dataField = 'data'
 const ERROR_MSG = {
   '-1': '未知错误',
+  0: '请求成功',
   90001: '网络错误', // Network Error
   90002: '请求超时', // timeout
   90003: '请求取消' // Cancel
@@ -54,7 +55,7 @@ const notificationDuration = 10
  * @param {Object} res 响应体，或Error实例
  */
 const feedbackHandler = function (res) {
-  const defaultFeedback = !!res.data[errorCodeField] || !res.response // 成功默认不显示反馈，失败默认显示
+  const defaultFeedback = !!res.data[errorCodeField] // 成功默认不显示反馈，失败默认显示
   // feedback: 是否显示反馈，也可在后续的业务处理回调函数里自定义反馈
   const { feedback = defaultFeedback } = res.config
 
@@ -233,6 +234,13 @@ instance.interceptors.response.use(
   */
   response => {
     // 2XX状态码
+    if (response.data && !response.data[errorCodeField]) {
+      // 兼容没有传errorcode的情况
+      const _data = response.data
+      response.data = {}
+      response.data[dataField] = _data
+      response.data[errorCodeField] = 0
+    }
     feedbackHandler(response)
     removeCancelToken(response.config)
     return response
@@ -265,7 +273,8 @@ instance.interceptors.response.use(
         data: {
           [errorCodeField]: code
         },
-        config: error.config
+        config: error.config,
+        message: error.message
       })
     } else {
       feedbackHandler(error)
