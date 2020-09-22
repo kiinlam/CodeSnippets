@@ -45,7 +45,8 @@ const ERROR_MSG = {
   0: '请求成功',
   90001: '网络错误', // Network Error
   90002: '请求超时', // timeout
-  90003: '请求取消' // Cancel
+  90003: 'Not Found', // Not Found
+  90004: '请求取消' // Cancel
 }
 const messageDuration = 2.5
 const notificationDuration = 10
@@ -262,13 +263,22 @@ instance.interceptors.response.use(
     } else if (error.message.indexOf('timeout') === 0) {
       // 超时
       code = 90002
+    } else if (error.message.indexOf('404') === 32) {
+      // 404
+      code = 90003
     } else if (axios.isCancel(error)) {
       // 请求取消
-      code = 90003
+      code = 90004
       error.config.feedback = false
+    } else {
+      // 未知错误
+      code = -1
     }
 
-    if (code > 90000) {
+    if (error.data) {
+      error.data[errorCodeField] = code
+      feedbackHandler(error)
+    } else {
       feedbackHandler({
         data: {
           [errorCodeField]: code
@@ -276,8 +286,6 @@ instance.interceptors.response.use(
         config: error.config,
         message: error.message
       })
-    } else {
-      feedbackHandler(error)
     }
 
     removeCancelToken(error.config)
