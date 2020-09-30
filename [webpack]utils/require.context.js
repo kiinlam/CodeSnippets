@@ -2,6 +2,13 @@
  * 使用webpack提供的require.context()方法, 将文件夹下的模块引入
  * 参考链接
  * https://webpack.js.org/guides/dependency-management/#requirecontext
+ * require.context() exports a (require) function that takes one argument: the request.
+ *
+ * The exported function has 3 properties: resolve, keys, id.
+ *
+ * resolve is a function and returns the module id of the parsed request.
+ * keys is a function that returns an array of all possible requests that the context module can handle.
+ * id is the module id of the context module. This may be useful for module.hot.accept
  */
 
 /**
