@@ -1,0 +1,38 @@
+/* 自定义 webkit-scrollbar 样式 */
+/* 整体部分 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background: rgba(60,60,60,0.03);
+  border-radius: 4px;
+}
+
+/* 两端按钮 */
+::-webkit-scrollbar-button {
+}
+
+/* 轨道 */
+::-webkit-scrollbar-track {
+}
+
+/* 显露的轨道 */
+::-webkit-scrollbar-track-piece {
+}
+
+/* 滑块 */
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(144,147,153,.1);
+  transition: background-color .3s;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(144,147,153,.3);
+}
+
+/* 转角 */
+::-webkit-scrollbar-corner {
+}
+
+/* 右下角大小调整块 */
+::-webkit-resizer {
+}
