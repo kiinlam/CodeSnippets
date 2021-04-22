@@ -49,7 +49,7 @@ export function watermark(options = {}) {
     display: 'block',
     margin: 0,
     padding: 0,
-    position: 'fixed',
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
