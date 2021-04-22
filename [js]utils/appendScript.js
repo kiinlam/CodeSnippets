@@ -12,8 +12,7 @@ export const appendScript = (url) => {
 // @version      0.1
 // @description  try to take over the world!
 // @author       You
-// @match        https://gugong.ktmtech.cn/
-// @icon         https://www.google.com/s2/favicons?domain=ktmtech.cn
+// @include      *
 // @grant        none
 // @require      https://code.jquery.com/jquery-3.6.0.min.js
 // ==/UserScript==
@@ -23,6 +22,7 @@ export const appendScript = (url) => {
 
   var jq = jQuery.noConflict(); // tampermonkey 加载的jq
   console.log(jq().jquery)
+  window.jq = jq
   var $ = $ || window.$; // 网页使用的jq
-  console.log($().jquery)
+  $ && console.log($().jquery)
 })();
