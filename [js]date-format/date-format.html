@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>date-format</title>
+  <style>
+    fieldset {
+      margin-right: 10px;
+      margin-bottom: 20px;
+      padding: 15px;
+    }
+    legend {
+      font-size: 20px;
+    }
+    label {
+      display: inline-block;
+      width: 80px;
+      user-select: none;
+    }
+    label:hover {
+      background-color: rgba(168, 168, 168, 0.1);
+    }
+    .option {
+      line-height: 28px;
+    }
+    .option-key {
+      display: inline-block;
+      width: 80px;
+    }
+    #result span {
+      display: inline-block;
+      width: 160px;
+    }
+  </style>
+</head>
+<body>
+  <fieldset>
+    <legend>Locale</legend>
+    <div class="option">
+      <span class="option-key">locale: </span>
+  
+      <input type="radio" name="locale" id="locale0" checked onclick="handleLocaleClick('zh-CN')">
+      <label for="locale0">zh-CN</label>
+  
+      <input type="radio" name="locale" id="locale1" onclick="handleLocaleClick('en-US')">
+      <label for="locale1">en-US</label>
+  
+    </div>
+  
+  </fieldset>
+  <div id="content"></div>
+  <div id="result"></div>
+  <script>
+    // https://elijahmanor.com/blog/format-js-dates-and-times
+    let locale = "zh-CN"
+    const dateConfig = [
+      {
+        weekday: ["", "narrow", "short", "long"]
+      },
+      {
+        year: ["", "numeric", "2-digit"]
+      },
+      {
+        month: ["", "numeric", "2-digit", "narrow", "short", "long"]
+      },
+      {
+        day: ["", "numeric", "2-digit"]
+      },
+    ]
+    const timeConfig = [
+      {
+        timeZone: [""] // https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+      },
+      {
+        hour12: ["", true, false]
+      },
+      {
+        hour: ["", "numeric", "2-digit"]
+      },
+      {
+        minute: ["", "numeric", "2-digit"]
+      },
+      {
+        second: ["", "numeric", "2-digit"]
+      },
+    ]
+
+    function handleLocaleClick(localeStr) {
+      locale = localeStr
+      showDateString()
+    }
+
+    function handleClick(name, key, value) {
+      console.log('handleClick')
+      console.log(name, ':', key, '=', value)
+      let config = timeOptions
+      if (name === 'Date Options') {
+        config = dateOptions
+      }
+      if (value === '') {
+        if (key in config) {
+          delete config[key]
+        }
+      } else {
+        config[key] = value
+      }
+      console.log(config)
+      showDateString()
+    }
+
+    function getHtml(name, config) {
+      let htmlStr = '<fieldset><legend>{{configName}}</legend>{{configList}}</fieldset>'
+      htmlStr = htmlStr.replace('{{configName}}', name)
+
+      const configList = []
+      config.forEach(option => {
+        // option => { weekday: ["", "narrow", "short", "long"] }
+        let configItemStr = `
+          <div class="option">
+            <span class="option-key">{{optionKey}}: </span>
+            {{optionList}}
+          </div>
+        `
+        for (let key in option) {
+          configItemStr = configItemStr.replace('{{optionKey}}', key)
+          const arr = option[key] // => ["", "narrow", "short", "long"]
+          const radioListStr = []
+          arr.forEach((value, i) => {
+            let radioItemStr = `
+              <input type="radio" name="${key}" id="${key}${i}" onclick="handleClick('${name}', '${key}', ${typeof value === 'string' ? `'${value}'` : value})">
+              <label for="${key}${i}">${value === '' ? '无' : value }</label>
+            `
+            radioListStr.push(radioItemStr)
+          })
+          configItemStr = configItemStr.replace('{{optionList}}', radioListStr.join(''))
+        }
+        configList.push(configItemStr)
+      })
+
+      htmlStr = htmlStr.replace('{{configList}}', configList.join(''))
+      return htmlStr
+    }
+
+    const elem = document.querySelector('#content')
+    const dateConfigStr = getHtml('Date Options', dateConfig)
+    const timeConfigStr = getHtml('Time Options', timeConfig)
+    elem.innerHTML = dateConfigStr + timeConfigStr
+
+    const dateOptions = {}
+    const timeOptions = {}
+
+    const date = new Date()
+    function showDateString() {
+    const elem = document.querySelector('#result')
+      console.log(date.toLocaleDateString(locale, dateOptions))
+      console.log(date.toLocaleTimeString(locale, timeOptions))
+      console.log(date.toLocaleString(locale, { ...dateOptions, ...timeOptions }))
+      elem.innerHTML = `
+        <div><span>toISOString：</span> ${date.toISOString()}</div>
+        <div><span>toLocaleDateString：</span> ${date.toLocaleDateString(locale, dateOptions)}</div>
+        <div><span>toLocaleTimeString：</span> ${date.toLocaleTimeString(locale, timeOptions)}</div>
+        <div><span>toLocaleString：</span> ${date.toLocaleString(locale, { ...dateOptions, ...timeOptions })}</div>
+      `
+    }
+    showDateString()
+
+  </script>
+</body>
+</html>
