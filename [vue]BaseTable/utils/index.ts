@@ -53,13 +53,27 @@ const isEmptyObject = function isEmptyObject(value) {
 const isEmpty = function isEmpty(value) {
   if (
     (typeof value === 'string' && value.trim() === '') ||
-    (value === null) || 
-    (value === undefined) ||
+    value === null ||
+    value === undefined ||
     (typeof value === 'number' && isNaN(value)) ||
     (Array.isArray(value) && value.length === 0) ||
     (typeof value === 'object' && isEmptyObject(value))
-  ) return true
+  )
+    return true
   return false
 }
 
-export { isOn, camelize, hyphenate, capitalize, hasOwn, isEmptyObject, isEmpty }
+const isValueNil = function isValueNil(val) {
+  return val === undefined || val === null
+}
+
+export {
+  isOn,
+  camelize,
+  hyphenate,
+  capitalize,
+  hasOwn,
+  isEmptyObject,
+  isEmpty,
+  isValueNil,
+}
