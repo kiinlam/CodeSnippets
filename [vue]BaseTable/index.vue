@@ -1,12 +1,12 @@
 <template>
-  <div ref="tableWrapRef" class="base-table-wrapper" :height="rect.height" v-bind="props">
-    <div class="base-table-container">
-      <Table v-bind="tableAttrs"></Table>
+  <div ref="tableWrapRef" class="base-table-wrapper" v-bind="props">
+    <div class="base-table-container" :class="{'base-table-autofit': tableAttrs.autoFit}">
+      <Table v-bind="tableAttrs" :scroll="scroll"></Table>
     </div>
   </div>
   <Pagination v-if="paginationConfig.total > 0" v-bind="paginationConfig" />
   <!-- 以下用于去除控制台非props继承提示 -->
-  <template v-bind="attrs"></template>
+  <template v-bind="attrs" v-show="false"></template>
 </template>
 
 <script lang="ts" setup>
@@ -24,6 +24,7 @@ const props = defineProps<{
   id?: any
   style?: any
   pagination?: any
+  scroll?: any
 }>()
 
 // 分页需要更新的数据
@@ -54,7 +55,7 @@ const tableAttrs = computed(() => {
   addIndexColumn(tableAttrs.addIndex, tableAttrs.columns, paginationConfig)
 
   // 数据渲染前拦截方法
-  tableAttrs.transformCellText = commonCellRender(tableAttrs)
+  tableAttrs.transformCellText = commonCellRender(tableAttrs, slots)
   
   return tableAttrs
 })
@@ -83,7 +84,21 @@ watchEffect(
 
 // 表格高度自适应
 const tableWrapRef = ref()
-const { rect } = useDomRect(tableWrapRef)
+const scroll = reactive({
+  ...props.scroll,
+})
+if (tableAttrs.value.autoFit !== false) {
+  tableAttrs.value.autoFit = true
+  const { rect } = useDomRect(tableWrapRef)
+  watch(
+    rect,
+    (val) => {
+      // 55为表头的高度，300为表格最小高度
+      scroll.y = Math.max(val.height - 55, 300)
+    }
+  )
+}
+
 </script>
 
 <style scoped>
@@ -91,7 +106,7 @@ const { rect } = useDomRect(tableWrapRef)
   flex: 1;
   position: relative;
 }
-.base-table-container {
+.base-table-autofit {
   position: absolute;
   top: 0;
   right: 0;

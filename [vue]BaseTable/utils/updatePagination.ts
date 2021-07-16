@@ -44,6 +44,6 @@ export default function updatePagination(pagination = {}, baseConfig) {
     }
   }
   config.onShowSizeChange = config.onChange
-  console.log('pagination:', config)
+  // console.log('pagination:', config)
   return config
 }
