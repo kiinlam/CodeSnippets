@@ -25,7 +25,10 @@ const props = defineProps<{
   style?: any
   pagination?: any
   scroll?: any
+  remote?: any
 }>()
+
+const emit = defineEmit(['remote:success', 'remote:error', 'remote:complete'])
 
 // 分页需要更新的数据
 const basePagination = reactive({
@@ -45,6 +48,9 @@ const tableAttrs = computed(() => {
   // 设置默认的row-key
   tableAttrs.rowKey = tableAttrs.rowKey || (row => (row.id || row.key))
 
+  // 设置loading状态
+  tableAttrs.loading = tableAttrs.loading || false
+
   // 关闭自带的分页组件
   tableAttrs.pagination = false
 
@@ -60,7 +66,7 @@ const tableAttrs = computed(() => {
   return tableAttrs
 })
 
-// 删除最后一条数据后翻页处理
+// 删除最后一条数据后翻页处理可通过此方法获取信息
 // onlyOne: true | pageLastOne: true -> 最后一条记录
 // onlyOne: false | pageLastOne: true -> 当前页最后一条记录
 // onlyOne: false | pageLastOne: false -> 不是最后一条记录
@@ -98,6 +104,35 @@ if (tableAttrs.value.autoFit !== false) {
     }
   )
 }
+
+// 远程异步请求处理
+// if (props.remote) {
+  function request() {
+    tableAttrs.value.loading = true
+    props.remote().then(res => {
+      emit('remote:success', res)
+    }).catch((e) => {
+      emit('remote:error', e)
+    }).finally(() => {
+      tableAttrs.value.loading = false
+      emit('remote:complete')
+    })
+  }
+  // watchEffect(() => {
+  watch(props.remote, request, // bug!
+  {
+    // onTrack(e) {
+    //   console.log(e)
+    //   debugger
+    // },
+    // onTrigger(e) {
+    //   console.log(e)
+    //   debugger
+    // },
+    flush: 'post'
+  }
+  )
+// }
 
 </script>
 
