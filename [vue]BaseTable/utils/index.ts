@@ -1,34 +1,34 @@
-const cacheStringFunction = function cacheStringFunction(fn) {
-  const cache = Object.create(null)
-  return function (str) {
-    const hit = cache[str]
-    return hit || (cache[str] = fn(str))
-  }
-}
+// const cacheStringFunction = function cacheStringFunction(fn) {
+//   const cache = Object.create(null)
+//   return function (str) {
+//     const hit = cache[str]
+//     return hit || (cache[str] = fn(str))
+//   }
+// }
 
-const onRE = /^on[^a-z]/
-const isOn = function isOn(key) {
-  return onRE.test(key)
-}
+// const onRE = /^on[^a-z]/
+// const isOn = function isOn(key) {
+//   return onRE.test(key)
+// }
 
-// 转为驼峰
-const camelizeRE = /-(\w)/g
-const camelize = cacheStringFunction(function (str) {
-  return str.replace(camelizeRE, function (_, c) {
-    return c ? c.toUpperCase() : ''
-  })
-})
+// // 转为驼峰
+// const camelizeRE = /-(\w)/g
+// const camelize = cacheStringFunction(function (str) {
+//   return str.replace(camelizeRE, function (_, c) {
+//     return c ? c.toUpperCase() : ''
+//   })
+// })
 
-// 转为连词
-const hyphenateRE = /\B([A-Z])/g
-const hyphenate = cacheStringFunction(function (str) {
-  return str.replace(hyphenateRE, '-$1').toLowerCase()
-})
+// // 转为连词
+// const hyphenateRE = /\B([A-Z])/g
+// const hyphenate = cacheStringFunction(function (str) {
+//   return str.replace(hyphenateRE, '-$1').toLowerCase()
+// })
 
-// 转为大写
-const capitalize = cacheStringFunction(function (str) {
-  return str.charAt(0).toUpperCase() + str.slice(1)
-})
+// // 转为大写
+// const capitalize = cacheStringFunction(function (str) {
+//   return str.charAt(0).toUpperCase() + str.slice(1)
+// })
 
 const hasOwnProperty = Object.prototype.hasOwnProperty
 const hasOwn = function hasOwn(val, key) {
@@ -68,10 +68,10 @@ const isValueNil = function isValueNil(val) {
 }
 
 export {
-  isOn,
-  camelize,
-  hyphenate,
-  capitalize,
+  // isOn,
+  // camelize,
+  // hyphenate,
+  // capitalize,
   hasOwn,
   isEmptyObject,
   isEmpty,
