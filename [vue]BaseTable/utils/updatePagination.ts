@@ -16,7 +16,7 @@ export default function updatePagination(pagination = {}, baseConfig) {
     pageSizeOptions:['10', '20', '50', '100', '200'],
     showQuickJumper: true,
     showSizeChanger: true,
-    total: 0,
+    total: baseConfig.total,
     showTotal(total) {
       return `共 ${total} 条`
     },
@@ -43,7 +43,9 @@ export default function updatePagination(pagination = {}, baseConfig) {
       handler(page, pageSize)
     }
   }
-  config.onShowSizeChange = config.onChange
-  // console.log('pagination:', config)
+  config.onShowSizeChange = function (page, pageSize) {
+    // 切换分页大小时，重置为第一页
+    config.onChange(1, pageSize)
+  }
   return config
 }

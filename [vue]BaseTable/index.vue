@@ -77,6 +77,7 @@ const rowKey = computed(() => {
 const innerPagination = reactive({
   current: 1,
   pageSize: 10,
+  total: 0,
 })
 // 处理分页配置
 const paginationConfig = computed(() => {
@@ -147,6 +148,9 @@ watchEffect(
   }
 )
 
+/**
+ * 远程数据请求
+ */
 let request = (...args) => {
   return Promise.resolve(args)
 }
@@ -155,6 +159,14 @@ if (props.remote) {
     return new Promise((resolve, reject) => {
       innerLoading.spinning = true
       props.remote(...args).then(res => {
+        // 尝试获取分页数据
+        if ('total' in res) {
+          setPage({total: res.total})
+        } else {
+          if (!('total' in props.pagination)) {
+            console.warn('未找到total属性，请使用数据绑定进行配置')
+          }
+        }
         emit('remote:success', res)
         resolve(res)
       }).catch((e) => {
@@ -167,8 +179,55 @@ if (props.remote) {
     })
   }
 }
+
+/**
+ * 更新loading状态
+ * 在不做为受控属性的情况下，单独修改内部loading状态
+ */
+const setLoading = (isLoading: boolean) => {
+  innerLoading.spinning = isLoading
+}
+
+/**
+ * 更新分页组件
+ * 在配置项不做为受控属性的情况下，单独修改内部分页配置
+ */
+const setPage = (pageData: {current?: number, pageSize?: number, total?: number}) => {
+  const { current: c, pageSize: s, total: t } = innerPagination
+  const { current, pageSize, total } = pageData
+  let isChange = false
+  if (current && current > 0 && current !== c) {
+    innerPagination.current = current
+    isChange = true
+  }
+  if (pageSize && pageSize > 0 && pageSize !== s) {
+    innerPagination.pageSize = pageSize
+    isChange = true
+  }
+  if (typeof total === 'number' && total >= 0 && total !== t) {
+    innerPagination.total = total
+  }
+  if (isChange) {
+    paginationConfig.value.onChange(innerPagination.current, innerPagination.pageSize)
+  }
+}
+
+/**
+ * 翻页后退
+ * 在配置项不做为受控属性的情况下，单独修改内部分页配置
+ */
+const jumpBy = (count: number) => {
+  if (count === 0) return
+  let { current, pageSize, total } = innerPagination
+  current = Math.min(Math.max(0, current + count), Math.ceil(total / pageSize))
+  innerPagination.current = current
+  paginationConfig.value.onChange(current, pageSize)
+}
+
 expose({
   request,
+  setLoading,
+  setPage,
 })
 
 </script>
