@@ -1,0 +1,96 @@
+/* HTML
+<p class="touch">Device is touchscreen</p>
+<p class="hover">Device is hoverable</p>
+*/
+
+/* 
+----- CSS plan A: hover -----
+*/
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(1rem, 5vw, 3rem);
+  margin: 0;
+  padding: 1rem;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: lime;
+}
+
+.hover {
+  display: none;
+}
+
+/* 
+hover: hover | none
+hover: which would be true for a device with a mouse, for instance
+none: which would be true for a tablet being used with touch input
+*/
+@media (hover: hover) {
+  body {
+    background: yellow;
+  }
+  
+  .touch {
+    display: none;
+  }
+  
+  .hover {
+    display: block;
+  }
+}
+
+
+
+/* 
+----- CSS plan B: pointer -----
+*/
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(1rem, 5vw, 3rem);
+  margin: 0;
+  padding: 1rem;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: lime;
+}
+
+.hover {
+  display: none;
+}
+/* 
+pointer: coarse | fine | none
+coarse: for a pointer such as a finger used on a touch screen
+fine: a mouse, for example
+none: a device with no pointer
+*/
+@media (hover: hover) and (pointer: fine) {
+  body {
+    background: yellow;
+  }
+  
+  .touch {
+    display: none;
+  }
+  
+  .hover {
+    display: block;
+  }
+}
+
+
+/* 
+----- CSS plan C: any-hover and any-pointer -----
+device that responds to both a mouse and touch input `any-hover: hover` would be true
+*/
