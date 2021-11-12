@@ -251,7 +251,7 @@ const pagination = {
 
 新增配置
 
-`update({ onlyOne, pageLastOne })`
+`update({ onlyOne, pageLastOne, onlyOnePage })`
 
 为了方便父组件判断列表数据是否为最后一行数据，组件内部做了判断，并调用传入的`update`方法返回给父组件
 
@@ -261,6 +261,7 @@ pageLastOne：表示当前数据为当前页的最后一条
 
 组合起来可以区分三种情况：
 
+* onlyOnePage: true -> 仅剩最后一页
 * onlyOne: true | pageLastOne: true -> 总数据最后一条记录
 * onlyOne: false | pageLastOne: true -> 当前页最后一条记录，但不是总数据最后一条
 * onlyOne: false | pageLastOne: false -> 既不是最后一条记录，也不是当前页最后一条
@@ -275,18 +276,18 @@ const dataSource = [...dataSource]
 const pagination = {
   onlyOne: false, // 最后一条记录，可选
   pageLastOne: false, // 当前页最后一条记录，可选
-  update({ onlyOne, pageLastOne }) {
+  update({ onlyOne, pageLastOne, onlyOnePage }) {
     pagination.onlyOne = onlyOne
     pagination.pageLastOne = pageLastOne
   }
 }
-function del(id) {
-  delFileById(id).then(res => {
-    if (pagination.pageLastOne) {
+function del(ids) {
+  delFileById(ids).then(res => {
+    if (pagination.pageLastOne || (!pagination.onlyOnePage && ids.length === dataSource.length )) {
       // 当前页最后一条数据即将被删除，此时需要后退一页
       baseTableRef.value.jumpBy(-1)
     } else {
-      dataSource.splice(id, 1)
+      baseTableRef.value.request()
     }
   })
 }

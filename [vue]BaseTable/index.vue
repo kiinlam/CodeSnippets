@@ -20,8 +20,14 @@
   />
 </template>
 
+<script lang="ts">
+export default defineComponent({
+  name: 'BaseTable',
+})
+</script>
+
 <script lang="ts" setup>
-import { computed, defineEmit, defineProps, reactive, ref, toRef, useContext, watch, watchEffect } from 'vue'
+import { defineComponent, computed, defineEmit, defineProps, reactive, ref, toRef, useContext, watch, watchEffect } from 'vue'
 import { Table, Pagination } from 'ant-design-vue'
 import { useDomRect } from './utils/useDomRect'
 import updateLoading from './utils/updateLoading'
@@ -125,7 +131,8 @@ if (!props.disableAutoFit) {
 }
 
 /**
- * 删除最后一条数据后翻页处理可通过此方法获取 onlyOne | pageLastOne 信息
+ * 删除最后一条数据后翻页处理可通过此方法获取 onlyOne | pageLastOne 信息 | onlyOnePage 信息
+ * onlyOnePage: true -> 仅剩最后一页
  * onlyOne: true | pageLastOne: true -> 最后一条记录
  * onlyOne: false | pageLastOne: true -> 当前页最后一条记录
  * onlyOne: false | pageLastOne: false -> 不是最后一条记录
@@ -136,6 +143,7 @@ watchEffect(
     const { current, total, update } = paginationConfig.value
     let onlyOne = false
     let pageLastOne = false
+    let onlyOnePage = false
     if (count === 1) {
       if ( current > 1) {
         pageLastOne = true
@@ -144,7 +152,10 @@ watchEffect(
         onlyOne = true
       }
     }
-    update({ onlyOne, pageLastOne })
+    if (count === total) {
+      onlyOnePage = true
+    }
+    update({ onlyOne, pageLastOne, onlyOnePage })
   }
 )
 
@@ -163,7 +174,7 @@ if (props.remote) {
         if ('total' in res) {
           setPage({total: res.total})
         } else {
-          if (!('total' in props.pagination)) {
+          if (!(props.pagination && 'total' in props.pagination) && res.data?.length) {
             console.warn('未找到total属性，请使用数据绑定进行配置')
           }
         }
@@ -228,6 +239,7 @@ expose({
   request,
   setLoading,
   setPage,
+  jumpBy,
 })
 
 </script>
