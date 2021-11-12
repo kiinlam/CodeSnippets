@@ -111,6 +111,7 @@ const transformCellText = commonCellRender(props.transformCellText, slots)
  */
 const tableWrapRef = ref()
 const scroll = reactive({
+  y: 300,
   ...props.scroll,
 })
 if (!props.disableAutoFit) {
