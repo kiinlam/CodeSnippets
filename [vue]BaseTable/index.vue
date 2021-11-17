@@ -80,14 +80,15 @@ const rowKey = computed(() => {
  * 处理分页配置
  */
 // 组件内分页需要更新的数据
+const pageProp = props.pagination
 const innerPagination = reactive({
-  current: 1,
-  pageSize: 10,
+  current: pageProp?.current || 1,
+  pageSize: pageProp?.pageSize || (pageProp?.pageSizeOptions && parseInt(pageProp?.pageSizeOptions[0])) || 10,
   total: 0,
 })
 // 处理分页配置
 const paginationConfig = computed(() => {
-  return updatePagination(props.pagination, innerPagination)
+  return updatePagination(pageProp, innerPagination)
 })
 
 /**
