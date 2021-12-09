@@ -1,6 +1,6 @@
 <template>
   <div ref="tableWrapRef" class="base-table-wrapper" :id="id" :class="class" :style="style">
-    <div class="base-table-container" :class="{'base-table-autofit': !disableAutoFit}">
+    <div class="base-table-container" :class="{ 'base-table-autofit': !disableAutoFit }">
       <Table
         v-bind="attrs"
         :dataSource="dataSource"
@@ -147,7 +147,7 @@ watchEffect(
     let pageLastOne = false
     let onlyOnePage = false
     if (count === 1) {
-      if ( current > 1) {
+      if (current > 1) {
         pageLastOne = true
       }
       if (total === 1) {
@@ -174,11 +174,14 @@ if (props.remote) {
       props.remote(...args).then(res => {
         // 尝试获取分页数据
         if ('total' in res) {
-          setPage({total: res.total})
+          setPage({ total: res.total })
         } else {
           if (!(props.pagination && 'total' in props.pagination) && res.data?.length) {
             console.warn('未找到total属性，请使用数据绑定进行配置')
           }
+          // 修复total值
+          res.total = 0
+          setPage({ total: 0 })
         }
         emit('remote:success', res)
         resolve(res)
@@ -205,7 +208,7 @@ const setLoading = (isLoading: boolean) => {
  * 更新分页组件
  * 在配置项不做为受控属性的情况下，单独修改内部分页配置
  */
-const setPage = (pageData: {current?: number, pageSize?: number, total?: number}) => {
+const setPage = (pageData: { current?: number, pageSize?: number, total?: number }) => {
   const { current: c, pageSize: s, total: t } = innerPagination
   const { current, pageSize, total } = pageData
   let isChange = false
