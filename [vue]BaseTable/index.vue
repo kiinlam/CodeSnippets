@@ -208,7 +208,7 @@ const setLoading = (isLoading: boolean) => {
  * 更新分页组件
  * 在配置项不做为受控属性的情况下，单独修改内部分页配置
  */
-const setPage = (pageData: { current?: number, pageSize?: number, total?: number }) => {
+const setPage = (pageData: { current?: number, pageSize?: number, total?: number }, forceChange?: boolean) => {
   const { current: c, pageSize: s, total: t } = innerPagination
   const { current, pageSize, total } = pageData
   let isChange = false
@@ -223,7 +223,7 @@ const setPage = (pageData: { current?: number, pageSize?: number, total?: number
   if (typeof total === 'number' && total >= 0 && total !== t) {
     innerPagination.total = total
   }
-  if (isChange) {
+  if (isChange || forceChange) {
     paginationConfig.value.onChange(innerPagination.current, innerPagination.pageSize)
   }
 }

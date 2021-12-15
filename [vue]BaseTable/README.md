@@ -515,7 +515,7 @@ onMounted(() => {
 
 #### setPage 方法
 
-setPage(pageData: {current?: number, pageSize?: number, total?: number}): void
+setPage(pageData: {current?: number, pageSize?: number, total?: number}, forceChange?: boolean): void
 
 通过命令式调用控制分页组件，设置成功后，会调用分页配置的`onChange`方法
 
