@@ -32,6 +32,7 @@
 | columns | 在原来column配置项上增加了配置，参见 `column` 小节 | Column[] | [] |
 | loading | 可选受控属性，是否显示加载中状态 | boolean \| Spin | false |
 | pagination | 在原来pagination配置项上增加了配置，参见 `pagination` 小节 | object | 参见 `pagination` 小节 |
+| hidePagination | 隐藏分页Dom节点，功能不影响 | boolean | undefined |
 | remote | 新增配置，指定远程api请求方法 | Promise | undefined |
 | transformCellText | 单元格渲染之前的处理方法 | String \| Function(slotScope, slots) | 空值时：字符串"-" \| 原始渲染内容 |
 

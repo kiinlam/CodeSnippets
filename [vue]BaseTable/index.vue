@@ -14,7 +14,7 @@
     </div>
   </div>
   <Pagination
-    v-if="paginationConfig.total > 0"
+    v-if="!hidePagination"
     v-bind="paginationConfig"
     class="pagination-wrapper"
   />
@@ -48,6 +48,7 @@ const props = defineProps<{
   columns?: any[]
   loading?: any
   pagination?: any
+  hidePagination?: boolean
   remote?: any
   rowKey?: any
   scroll?: any
