@@ -16,7 +16,7 @@ function main() {
       if (item.kind === 'file') {
         console.log('file: ', item);
         // https://developer.mozilla.org/en-US/docs/Web/API/FileSystemHandle
-        const entry = await item.getAsFileSystemHandle(); // 使用改方法后会导致items变为0个元素
+        const entry = await item.getAsFileSystemHandle(); // 使用该方法后会导致items变为0个元素
         if (entry.kind === 'file') {
           // run code for if entry is a file
           console.log('file: ', item);
