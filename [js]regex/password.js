@@ -4,3 +4,6 @@
 // .{8,16}$ 匹配任意8到16个字符
 const reg = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!@#$%^&*])(?=^[a-zA-Z0-9~!@#$%^&*]+$).{8,16}$/
 reg.test('ASFDdge35is^$') // true
+
+// 正则示例
+// https://www.w3cschool.cn/regexp/1ngu1pqi.html
