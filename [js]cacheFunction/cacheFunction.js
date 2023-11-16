@@ -17,6 +17,11 @@ function createCacheNode() {
 
 let fnMap = createCacheRoot();
 
+/** 
+    创建函数 fn 的缓存版本
+    将根据传入参数进行返回值的缓存，在传入相同参数的情况下，直接返回缓存值。
+    使用 weekMap 存储引用型参数，使用 Map 存储原始值参数
+ */
 export function cache(fn) {
   return function () {
     const fnNode = fnMap.get(fn);
