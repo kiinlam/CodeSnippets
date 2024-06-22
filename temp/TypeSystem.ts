@@ -31,6 +31,13 @@ export function resolveType(id: string, type: Type) {}
 // 已知 id 与 对象，查出类型并赋值
 export function determineType(id: string, obj: Record<string, any>) {}
 
+export function isSubsetOfReplyType(subset: Type): boolean {
+  return isSubsetOfType(ReplyType, subset);
+}
+export function isSubsetOfType(set: Type, subset: Type): boolean {
+  return (set & subset) === subset;
+}
+
 // 类型转成对应的类型字符
 export function typeToString(type: Type) {
   const typeString: string[] = [];
