@@ -1,3 +1,5 @@
+// 扩展：https://segmentfault.com/a/1190000043931873
+
 export function downloadFile(options) {
   const {
     url,
