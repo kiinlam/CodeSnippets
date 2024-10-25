@@ -1,0 +1,10 @@
+.overscroll {
+  overscroll-behavior: [ contain | none | auto ]{1,2};
+  /* 单个关键字值 */
+  overscroll-behavior: auto;     /* 默认值 */
+  overscroll-behavior: contain;
+  overscroll-behavior: none;
+
+  /* 两个值，分别表示x方向和y方向 */
+  overscroll-behavior: auto contain;
+}
