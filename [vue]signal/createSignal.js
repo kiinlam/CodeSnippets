@@ -1,3 +1,4 @@
+// Solid Signals
 import { shallowRef, triggerRef } from 'vue'
 
 export function createSignal(value, options) {
@@ -8,4 +9,20 @@ export function createSignal(value, options) {
     if (options?.equals === false) triggerRef(r)
   }
   return [get, set]
+}
+
+
+// Angular 信号
+import { shallowRef } from 'vue'
+
+export function signal(initialValue) {
+  const r = shallowRef(initialValue)
+  const s = () => r.value
+  s.set = (value) => {
+    r.value = value
+  }
+  s.update = (updater) => {
+    r.value = updater(r.value)
+  }
+  return s
 }
